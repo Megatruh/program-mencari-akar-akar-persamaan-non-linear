@@ -17,7 +17,8 @@ def iterasi_sederhana(persamaan_str, list_x0, epsilon=0.0001):
         data_pengujian = {
             "x0": x0,
             "status": "Divergen",
-            "iterasi_data": []
+            "iterasi_data": [],
+            "akar": None
         }
         
         # 2. Validasi Golden Rule: |g'(x0)| < 1
@@ -48,6 +49,7 @@ def iterasi_sederhana(persamaan_str, list_x0, epsilon=0.0001):
                 ])
                 
                 if selisih < epsilon or iterasi > 100: # Limit 100 iterasi agar tidak loop selamanya
+                    data_pengujian["akar"] = xn_plus_1
                     break
                 
                 xn = xn_plus_1
@@ -90,5 +92,7 @@ for hasil in hasil_uji:
     if hasil['status'] == "Konvergen":
         headers = ["Iterasi", "xn", "g(xn)", "xn+1", "|xn+1 - xn|"]
         print(tabulate(hasil['iterasi_data'], headers=headers, tablefmt="grid"))
+        if hasil['akar'] is not None:
+            print(f"\n✓ AKAR PERSAMAAN: x ≈ {hasil['akar']:.8f}")
     else:
         print(f"Perhitungan dihentikan karena nilai x0 bersifat {hasil['status']}.")
